@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:20-alpine
 
 LABEL org.opencontainers.image.source="https://github.com/dongten/containers"
 
