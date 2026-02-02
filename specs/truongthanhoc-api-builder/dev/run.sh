@@ -19,6 +19,6 @@ npm install -g node-gyp
 npm config set fetch-retry-maxtimeout 600000 -g && npm install --only=production
 npm run build
 
-cp -r $APP_BUILD/dist/* $APP_OUTPUT
+cp -r $APP_BUILD/* $APP_OUTPUT
 
 exit 0
