@@ -9,4 +9,4 @@ ENV NODE_ENV=${NODE_ENV}
 COPY run.sh /app/run.sh
 RUN chmod +x /app/run.sh
 
-CMD ["/app/run.sh", "/app/src", "/app/out", "/app/builds", "${NODE_ENV}"]
+CMD ["/app/run.sh", "/source", "/app", "/builds", "${NODE_ENV}"]
