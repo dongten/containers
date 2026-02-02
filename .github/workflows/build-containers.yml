@@ -1,4 +1,4 @@
-name: Build and Publish Containers
+name: Dynamic Container Build & Publish
 
 on:
   push:
@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   scan:
+    name: Discovery Scan
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -46,6 +47,7 @@ jobs:
           echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
 
   build-and-publish:
+    name: Build ${{ matrix.image }}:${{ matrix.tag }}
     needs: scan
     runs-on: ubuntu-latest
     # If the matrix is empty, this job might fail or be skipped depending on runner behavior.
