@@ -6,7 +6,7 @@ RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev l
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-COPY run.sh /app/run.sh
-RUN chmod +x /app/run.sh
+COPY run.sh /run.sh
+RUN chmod +x /run.sh
 
-CMD ["/app/run.sh", "/source", "/app", "/builds", "${NODE_ENV}"]
+CMD ["/run.sh", "/source", "/app", "/builds", "${NODE_ENV}"]
