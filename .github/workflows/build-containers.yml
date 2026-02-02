@@ -1,0 +1,87 @@
+name: Build and Publish Containers
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Scan specs directory
+        id: set-matrix
+        run: |
+          # Find all Dockerfiles in specs/<image>/<tag>/Dockerfile
+          # We search for Dockerfile at depth 3 (specs/A/B/Dockerfile)
+          # We output a JSON object for each match
+          
+          echo "Scanning specs directory..."
+          
+          MATRIX_JSON=$(find specs -mindepth 3 -maxdepth 3 -name Dockerfile | \
+            awk -F/ '{print "{\"image\": \"" $2 "\", \"tag\": \"" $3 "\", \"context\": \"specs/" $2 "/" $3 "\"}"}' | \
+            jq -s '{"include": .}')
+          
+          # Handle empty result case to avoid empty matrix errors if needed, 
+          # though jq -s will output {"include": []} if empty input.
+          # GitHub Actions matrix doesn't like empty arrays for include, so we might want to fail or handle it.
+          # For now, we assume there is at least one image.
+          
+          echo "Generated Matrix:"
+          echo "$MATRIX_JSON" | jq .
+          
+          # Set output for next job. 
+          # Using GITHUB_OUTPUT environment file
+          echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+
+  build-and-publish:
+    needs: scan
+    runs-on: ubuntu-latest
+    # If the matrix is empty, this job might fail or be skipped depending on runner behavior.
+    if: ${{ fromJson(needs.scan.outputs.matrix).include[0] }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.scan.outputs.matrix) }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}
+          tags: |
+            type=raw,value=${{ matrix.tag }}
+            # Optionally add 'latest' tag schema if desired, but user asked for specific mapping
+            # type=raw,value=latest,enable=${{ matrix.tag == 'latest' }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.context }}/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Continue on error is handled by strategy fail-fast: false matrix-wide.
+          # If an individual build step fails, the job fails, but others continue.
