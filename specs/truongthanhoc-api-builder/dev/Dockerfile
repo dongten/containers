@@ -9,4 +9,4 @@ ENV NODE_ENV=${NODE_ENV}
 COPY run.sh /run.sh
 RUN chmod +x /run.sh
 
-CMD ["/run.sh", "/in", "/out"]
+CMD ["/run.sh", "/src", "/dist"]
