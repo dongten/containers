@@ -31,7 +31,7 @@ jobs:
           
           MATRIX_JSON=$(find specs -mindepth 3 -maxdepth 3 -name Dockerfile | \
             awk -F/ '{print "{\"image\": \"" $2 "\", \"tag\": \"" $3 "\", \"context\": \"specs/" $2 "/" $3 "\"}"}' | \
-            jq -s '{"include": .}')
+            jq -sc '{"include": .}')
           
           # Handle empty result case to avoid empty matrix errors if needed, 
           # though jq -s will output {"include": []} if empty input.
@@ -39,7 +39,7 @@ jobs:
           # For now, we assume there is at least one image.
           
           echo "Generated Matrix:"
-          echo "$MATRIX_JSON" | jq .
+          echo "$MATRIX_JSON"
           
           # Set output for next job. 
           # Using GITHUB_OUTPUT environment file
