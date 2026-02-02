@@ -19,7 +19,7 @@ npm install -g node-gyp
 npm config set fetch-retry-maxtimeout 600000 -g && npm install --only=production
 npm run build
 
-cp -r /app/.next/standalone/* $APP_OUTPUT
-cp -r /app/.next/static $APP_OUTPUT/static
+cp -r $APP_BUILD/standalone/* $APP_OUTPUT
+cp -r $APP_BUILD/.next/static $APP_OUTPUT/static
 
 exit 0
