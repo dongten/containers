@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-APP_SOURCE=${1:-/src}
+APP_SOURCE=${1:-/in}
 APP_OUTPUT=${2:-/out}
 APP_BUILD=${3:-/app}
 
