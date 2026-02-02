@@ -2,8 +2,8 @@
 
 
 APP_SOURCE=${1:-/src}
-APP_OUTPUT=${2:-/app}
-APP_BUILD=${3:-/builds}
+APP_OUTPUT=${2:-/out}
+APP_BUILD=${3:-/app}
 
 export PATH=$PATH:$APP_BUILD/node_modules/.bin
 
