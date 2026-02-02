@@ -11,7 +11,7 @@ export PATH=$PATH:$APP_BUILD/node_modules/.bin
 mkdir -p $APP_BUILD
 mkdir -p $APP_OUTPUT
 
-cp $APP_SOURCE/* $APP_BUILD
+cp -r $APP_SOURCE/* $APP_BUILD
 
 cd $APP_BUILD
 
