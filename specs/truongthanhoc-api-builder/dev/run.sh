@@ -1,8 +1,9 @@
 #!/bin/sh
 
-SOURCE=$1
-OUTPUT=$2
-BUILD=${3:-false}
+
+SOURCE=${1:-/src}
+OUTPUT=${2:-/app}
+BUILD=${3:-/builds}
 
 export PATH=$PATH:$BUILD/node_modules/.bin
 
