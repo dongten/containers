@@ -7,6 +7,7 @@ APP_OUTPUT=${2:-/dist}
 # mkdir if not exists
 mkdir -p $APP_OUTPUT
 
+cd $APP_OUTPUT
 npm config set fetch-retry-maxtimeout 600000 -g
 npm install
 
