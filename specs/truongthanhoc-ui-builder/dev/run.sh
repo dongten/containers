@@ -15,9 +15,8 @@ cp -r $APP_SOURCE/* $APP_BUILD
 
 cd $APP_BUILD
 
-npm install -g node-gyp
-npm config set fetch-retry-maxtimeout 600000 -g && npm install --only=production
-npm run build
+npm config set fetch-retry-maxtimeout 600000 -g && npm install
+next build
 
 cp -r $APP_BUILD/* $APP_OUTPUT
 
