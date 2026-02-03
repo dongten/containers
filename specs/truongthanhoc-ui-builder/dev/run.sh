@@ -11,6 +11,6 @@ mkdir -p $APP_OUTPUT
 
 npm config set fetch-retry-maxtimeout 600000 -g
 npm install
-next build
+npm run build
 
 exit 0
