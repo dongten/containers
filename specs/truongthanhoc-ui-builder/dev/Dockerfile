@@ -9,8 +9,8 @@ ARG NEXT_PUBLIC_API_URL
 RUN apk add --no-cache libc6-compat
 
 ENV NODE_ENV=${NODE_ENV}
-ENV NEXT_PUBLIC_DOMAIN_URL=${NEXT_PUBLIC_DOMAIN_URL:-http://localhost:3000}
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:1377}
+ENV NEXT_PUBLIC_DOMAIN_URL=${NEXT_PUBLIC_DOMAIN_URL:-https://demo.sjjs.edu.vn}
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://api.sjjs.edu.vn}
 
 COPY run.sh /run.sh
 RUN chmod +x /run.sh
